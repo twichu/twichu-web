@@ -1,0 +1,14 @@
+{
+  "name": "demo-web",
+  "version": "0.0.0",
+  "scripts": {
+    "build": "cd client && npm run build",
+    "server": "cd server && npm start",
+    "client": "cd client && npm run dev",
+    "start": "concurrently \"npm run server\" \"npm run client\"",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "devDependencies": {
+    "concurrently": "^3.1.0"
+  }
+}
