@@ -2,8 +2,8 @@ var createError = require('http-errors');
 var express = require('express');
 var path = require('path');
 var cookieParser = require('cookie-parser');
-var logger = require('morgan');
-var stylus = require('stylus');
+var morgan = require('morgan');
+var session = require('express-session');
 
 var app = express();
 
@@ -11,16 +11,14 @@ var env = process.env.NODE_ENV = process.env.NODE_ENV || 'development';
 var config = require('./config/config')[env];
 require('./config/mongoose')(config);
 
-// view engine setup
-app.set('views', path.join(__dirname, 'views'));
-app.set('view engine', 'pug');
-
-app.use(logger('dev'));
+app.use(morgan('tiny'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
-app.use(stylus.middleware(path.join(__dirname, 'public')));
+app.use(session({ secret: 'keyboard cat', resave: true, saveUninitialized: true }));
 app.use(express.static(path.join(__dirname, 'public')));
+
+require('./config/passport.js')(app);
 
 app.use('/', require('./routes/index'));
 app.use(require('connect-history-api-fallback')())
@@ -38,7 +36,7 @@ app.use(function(err, req, res, next) {
 
   // render the error page
   res.status(err.status || 500);
-  res.render('error');
+  res.json(err);
 });
 
 module.exports = app;

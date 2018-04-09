@@ -1,5 +1,6 @@
 var mongoose = require('mongoose'),
-  tweetModel = require('../models/Tweet');
+  tweetModel = require('../models/Tweet'),
+  userModel = require('../models/User');
 
 module.exports = function(config) {
   mongoose.connect(config.db);

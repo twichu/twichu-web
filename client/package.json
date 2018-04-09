@@ -1,6 +1,6 @@
 {
-  "name": "demo-web-client",
-  "version": "0.0.0",
+  "name": "twichu-web-client",
+  "version": "0.0.1",
   "private": true,
   "scripts": {
     "dev": "webpack-dev-server --inline --progress --config build/webpack.dev.conf.js",

@@ -1,20 +1,19 @@
-# demo-web
+# Twichu Web
 
 ```
-npm start
+cd server && npm start
 ```
 
-## Express <- Vue.js
+## Install & Build
 
 ```
 npm install
 cd client && npm install
 cd server && npm install
-cd client && npm run build
-cd server && npm start
+npm start
 ```
 
-## MongoDB
+## Install MongoDB
 
 ```
 npm install -g mongodb

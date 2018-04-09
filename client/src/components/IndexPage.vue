@@ -3,6 +3,7 @@
     <h1>[트윗 목록]</h1>
     <router-link :to="{ name: 'HelloWorld' }">Go To HelloWorld</router-link>
     <router-link :to="{ name: 'ItemList' }">Go To ItemList</router-link>
+    <a href="/api/auth/twitter">LogIn</a>
     <div v-for="tweet in tweets" class="tweet">
       <img v-bind:src="tweet.poster" class="poster">
       <div>
