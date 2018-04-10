@@ -1,6 +1,6 @@
-var mongoose = require('mongoose');
+const mongoose = require('mongoose');
 
-var userSchema = mongoose.Schema({
+const userSchema = mongoose.Schema({
   id_str: String,
   name: String,
   screen_name: String,
@@ -9,4 +9,4 @@ var userSchema = mongoose.Schema({
   lang: String,
   profile_image_url: String,
 });
-var User = mongoose.model('User', userSchema);
+const User = mongoose.model('User', userSchema);

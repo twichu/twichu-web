@@ -1,13 +1,13 @@
-var mongoose = require('mongoose'),
-  tweetModel = require('../models/Tweet'),
-  userModel = require('../models/User');
+const mongoose = require('mongoose');
+const tweetModel = require('../models/Tweet');
+const userModel = require('../models/User');
 
-module.exports = function(config) {
+module.exports = function mongooseConfig(config) {
   mongoose.connect(config.db);
-  var db = mongoose.connection;
-  db.on('error', console.error.bind(console, 'connection error...'));
-  db.once('open', function callback() {
-    console.log('demo db opened');
+  const db = mongoose.connection;
+  db.on('error', console.error.bind(console, 'Connection Error...'));
+  db.once('open', () => {
+    console.log('DB Opened');
   });
 
   tweetModel.createDefaultTweets();
