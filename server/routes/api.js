@@ -15,12 +15,10 @@ router.get('/auth/twitter',
 
 router.get('/auth/twitter/callback',
   passport.authenticate('twitter', {
-    failureRedirect: '/'
+    successRedirect: 'http://127.0.0.1:8080/',
+    failureRedirect: '/',
   }),
-  function (req, res) {
-    // Successful authentication, redirect home.
-    res.redirect('/api/profile');
-  });
+);
 
 router.get('/profile',
   require('connect-ensure-login').ensureLoggedIn('/'),
