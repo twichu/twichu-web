@@ -11,17 +11,17 @@ Vue.prototype.$http = axios
 Vue.config.productionTip = false
 Vue.use(VueAxios, axios)
 Vue.use(VueAuthenticate, {
-  baseUrl: 'http://localhost:3000', // Your API domain
-  // providers: {
-  //   twitter: {
-  //     name: 'twitter',
-  //     url: '/api/auth/twitter',
-  //     authorizationEndpoint: 'https://api.twitter.com/oauth/authenticate',
-  //     redirectUri: 'http://localhost:8080/',
-  //     oauthType: '1.0',
-  //     popupOptions: { width: 495, height: 645 }
-  //   },
-  // }
+  baseUrl: 'http://127.0.0.1:3000', // Your API domain
+  providers: {
+    twitter: {
+      name: 'twitter',
+      url: '/api/auth/twitter',
+      authorizationEndpoint: 'https://api.twitter.com/oauth/authenticate',
+      redirectUri: '/api/auth/twitter/callback',
+      oauthType: '1.0',
+      popupOptions: { width: 495, height: 645 }
+    },
+  }
 })
 
 /* eslint-disable no-new */

@@ -51,7 +51,14 @@
       </ul>
       <ul class="navbar-nav ml-auto">
         <li class="nav-item">
-          <img v-bind:src="user_data.profile_image_url">
+          <img v-bind:src="user_data.profile_image_url" style="height:25px;margin-top:5px;">
+        </li>
+        <li class="nav-item">
+          <span class="nav-link">
+            {{user_data.statuses_count}} 트윗 / 
+            {{user_data.friends_count}} 팔로잉 / 
+            {{user_data.followers_count}} 팔로워
+          </span>
         </li>
         <li class="nav-item">
           <a class="nav-link" data-toggle="modal" data-target="#exampleModal" href="/api/auth/twitter">
