@@ -1,6 +1,7 @@
 const createError = require('http-errors');
 const express = require('express');
 const path = require('path');
+const cors = require('cors');
 const cookieParser = require('cookie-parser');
 const morgan = require('morgan');
 const session = require('express-session');
@@ -13,6 +14,7 @@ const config = require('./config/config')[env];
 require('./config/mongoose')(config);
 
 app.use(morgan('tiny'));
+app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());

@@ -76,7 +76,7 @@
     <a href="/api/auth/twitter">LogIn</a>
     <button @click="authenticate('twitter')">auth Twitter</button>
     <p>
-    {{ user_data }}
+    {{ user_data }} {{ user_timeline }}
     </p>
     <div v-for="tweet in tweets" class="tweet">
       <img v-bind:src="tweet.poster" class="poster">
@@ -152,16 +152,18 @@ export default {
     return {
       tweets: [],
       user_data: {},
+      user_timeline: {},
     }
   },
   methods: {
     authenticate: function (provider) {
-      this.$auth.authenticate(provider).then(function () {
+      var this_ = this;
+      this.$auth.authenticate(provider).then(function (response) {
+        this_.user_data = response.data;
         // Execute application logic after successful social authentication
-        this.$http.get('/api/profile')
+        this_.$http.get('/api/profile')
         .then((response) => {
-          // this.userInfo = response.data;
-          console.log(response.data);
+          this_.user_timeline = response;
         })
       })
     }
