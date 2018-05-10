@@ -1,4 +1,4 @@
-# demo-vue
+# front
 
 > A Vue.js project
 

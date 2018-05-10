@@ -73,7 +73,6 @@
     <br><br><br>
     <router-link :to="{ name: 'HelloWorld' }">Go To HelloWorld</router-link>
     <router-link :to="{ name: 'ItemList' }">Go To ItemList</router-link>
-    <a href="/api/auth/twitter">LogIn</a>
     <button @click="authenticate('twitter')">auth Twitter</button>
     <p>
     {{ user_data }} {{ user_timeline }}
