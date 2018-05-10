@@ -1,14 +1,26 @@
 <template>
   <div id="app">
-    <router-view/>
+    <app-navbar/>
+    <div class="content-wrapper">
+      <div class="container-fluid">
+        <router-view/>
+        <app-footer/>
+      </div>
+    </div>
   </div>
 </template>
 
 <script>
 import 'bootstrap';
+import AppNavBar from './components/AppNavBar.vue';
+import AppFooter from './components/AppFooter.vue'
 
 export default {
   name: 'App',
+  components: {
+    'app-navbar': AppNavBar,
+    'app-footer': AppFooter,
+  },
 };
 </script>
 

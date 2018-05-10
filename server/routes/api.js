@@ -105,8 +105,67 @@ router.post('/auth/twitter', (req, res) => {
 // );
 
 router.get('/profile', (req, res) => {
-  var oauthAccessToken = "";
-  var oauthAccessTokenSecret = "";
+  if (req.headers.authorization) {
+
+    User.findOne({
+      'access_token': req.headers.authorization.split(' ')[1]
+    }, function (err, user) {
+      if (err) console.log(err);
+
+      if (user) {
+        var oauthAccessToken = user.access_token;
+        var oauthAccessTokenSecret = user.access_token_secret;
+
+        var verifyCredentialsUrl = 'https://api.twitter.com/1.1/account/verify_credentials.json'
+        var parameters = {
+          oauth_consumer_key: TWITTER_CONSUMER_KEY,
+          oauth_token: oauthAccessToken,
+          oauth_nonce: ('vueauth-' + new Date().getTime()),
+          oauth_timestamp: timestamp.now(),
+          oauth_signature_method: 'HMAC-SHA1',
+          oauth_version: '1.0'
+        }
+
+        var signature = oauthSignature.generate('GET', verifyCredentialsUrl, parameters, TWITTER_CONSUMER_SECRET, oauthAccessTokenSecret)
+        
+        axios.get('https://api.twitter.com/1.1/account/verify_credentials.json', { 
+          headers: {
+            Authorization:  'OAuth ' +
+              'oauth_consumer_key="' + TWITTER_CONSUMER_KEY + '",' +
+              'oauth_token="' + oauthAccessToken + '",' +
+              'oauth_nonce="' + parameters.oauth_nonce + '",' +
+              'oauth_timestamp="' + parameters.oauth_timestamp + '",' +
+              'oauth_signature_method="HMAC-SHA1",'+
+              'oauth_version="1.0",' +
+              'oauth_signature="' + signature + '"'
+          }
+        }).then(function (response) {
+          res.json(response.data);
+        }).catch(function (err) {
+          console.log(err.response.data)
+          res.status(500).json(err.response.data)
+        })
+      }
+    });
+
+  }
+});
+
+router.get('/hometimeline', (req, res) => {
+  if (req.headers.authorization) {
+    var oauthAccessToken;
+    var oauthAccessTokenSecret;
+
+    User.findOne({
+      'access_token': req.headers.authorization.split(' ')[1]
+    }, function (err, user) {
+      if (err) console.log(err);
+
+      if (user) {
+        oauthAccessToken = user.access_token;
+        oauthAccessTokenSecret = user.access_token_secret;
+      }
+    });
 
     var verifyCredentialsUrl = 'https://api.twitter.com/1.1/statuses/home_timeline.json'
     var parameters = {
@@ -137,6 +196,7 @@ router.get('/profile', (req, res) => {
       console.log(err.response.data)
       res.status(500).json(err.response.data)
     })
-  });
+  }
+});
 
 module.exports = router;
