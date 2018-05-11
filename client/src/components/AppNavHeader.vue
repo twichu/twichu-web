@@ -1,14 +1,15 @@
 <template>
   <ul class="navbar-nav ml-auto">
     <li class="nav-item" v-if="isAuthenticated">
-      <img v-bind:src="user_data.profile_image_url" style="height:25px;margin-top:7px;">
-    </li>
-    <li class="nav-item" v-if="isAuthenticated">
-      <span class="nav-link">
-        {{user_data.statuses_count}} 트윗 / 
-        {{user_data.friends_count}} 팔로잉 / 
-        {{user_data.followers_count}} 팔로워
-      </span>
+      <router-link  class="nav-link" :to="{ name: 'ProfilePage' }">
+        <img class="nav-profile-img" v-bind:src="profile.profile_image_url">
+        <b>{{profile.name}}</b> <small>(@{{profile.screen_name}})</small>
+        <span class="nav-profile-info">
+          | {{profile.statuses_count}} 트윗 |
+          {{profile.friends_count}} 팔로잉 |
+          {{profile.followers_count}} 팔로워 |
+        </span>
+      </router-link>
     </li>
     <li class="nav-item" v-if="isAuthenticated">
       <a class="nav-link" @click="logout()">
@@ -16,7 +17,7 @@
     </li>
     <li class="nav-item" v-else>
       <a class="nav-link" @click="authenticate('twitter')">
-        <i class="fa fa-fw fa-sign-out"></i>LogIn</a>
+        <i class="fa fa-fw fa-sign-in"></i>LogIn</a>
     </li>
   </ul>
 </template>
@@ -26,30 +27,21 @@ import { mapGetters, mapActions } from 'vuex';
 
 export default {
   created () {
-    this.loadProfile()
-  },
-  data () {
-    return {
-      user_data: {}
-    }
+    this.getProfile()
   },
   computed: {
+    ...mapGetters('profileModule', ['profile']),
     isAuthenticated: function () {
       return this.$store.state.isAuthenticated
     }
   },
   methods: {
     ...mapActions({
-      logout: 'logout'
+      logout: 'logout',
+      getProfile: 'profileModule/getProfile',
     }),
     authenticate: function (provider) {
       this.$store.dispatch('authenticate', provider);
-    },
-    loadProfile () {
-      this.$http.get('/api/profile')
-        .then((response) => {
-          this.user_data = response.data;
-        })
     },
   }
 }

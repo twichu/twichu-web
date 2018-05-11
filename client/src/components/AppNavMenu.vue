@@ -7,10 +7,10 @@
       </a>
     </li>
     <li class="nav-item">
-      <a class="nav-link" href="tweetforme.html">
+      <router-link  class="nav-link" :to="{ name: 'ProfilePage' }">
         <i class="fa fa-fw fa-cogs"></i>
         <span class="nav-link-text">내 정보 관리</span>
-      </a>
+      </router-link>
     </li>
     <li class="nav-item">
       <a class="nav-link" href="tweetforme.html">

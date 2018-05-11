@@ -1,7 +1,8 @@
 import Vue from 'vue';
 import Router from 'vue-router';
-import HelloWorld from '@/components/HelloWorld';
 import IndexPage from '@/components/IndexPage';
+import ProfilePage from '@/components/ProfilePage';
+import HelloWorld from '@/components/HelloWorld';
 
 Vue.use(Router);
 
@@ -12,6 +13,11 @@ export default new Router({
       path: '/',
       name: 'Index',
       component: IndexPage,
+    },
+    {
+      path: '/profile',
+      name: 'ProfilePage',
+      component: ProfilePage,
     },
     {
       path: '/helloworld',

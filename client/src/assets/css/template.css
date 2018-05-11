@@ -439,3 +439,13 @@ footer.sticky-footer {
 .nav-logo {
   height: 30px;
 }
+
+.nav-profile-img {
+  height: 25px;
+  margin-right: 7px;
+  padding-bottom: 2px;
+}
+
+.nav-profile-info {
+  margin-left: 7px;
+}
