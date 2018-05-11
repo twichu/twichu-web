@@ -140,7 +140,21 @@ router.get('/profile', (req, res) => {
               'oauth_signature="' + signature + '"'
           }
         }).then(function (response) {
-          res.json(response.data);
+          user.description = response.data.description
+          user.followers_count = response.data.followers_count
+          user.friends_count = response.data.friends_count
+          user.lang = response.data.lang
+          user.location = response.data.location
+          user.name = response.data.name
+          user.profile_image_url = response.data.profile_image_url
+          user.screen_name = response.data.screen_name
+          user.statuses_count = response.data.statuses_count
+          user.url = response.data.url
+
+          user.save(function (err) {
+            if (err) console.log(err);
+            res.json(user);
+          });
         }).catch(function (err) {
           console.log(err.response.data)
           res.status(500).json(err.response.data)
@@ -148,6 +162,32 @@ router.get('/profile', (req, res) => {
       }
     });
 
+  }
+});
+
+router.patch('/profile', (req, res) => {
+  if (req.headers.authorization) {
+    User.findOne({
+      'access_token': req.headers.authorization.split(' ')[1]
+    }, function (err, user) {
+      if (err) console.log(err);
+      if(req.body._id) delete req.body._id
+      if(req.body.access_token) delete req.body.access_token
+      if(req.body.access_token_secret) delete req.body.access_token_secret
+      if(req.body.id_str) delete req.body.id_str
+
+      for(var p in req.body)
+      {
+        user[p] = req.body[p];
+      }
+      user.save(function (err) {
+        if (err) {
+          res.status(500).send(err);
+        } else {
+          res.json(user);
+        }
+      });
+    });
   }
 });
 

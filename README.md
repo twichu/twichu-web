@@ -1,21 +1,12 @@
 # Twichu Web
 
-```
-cd server && npm start
-```
+> User Customized Web Service Using Twitter
 
 ## Install & Build
 
 ```
 npm install
-cd client && npm install
-cd server && npm install
-npm start
-```
-
-## Install MongoDB
-
-```
-npm install -g mongodb
+npm run build
 mongod
+npm start
 ```

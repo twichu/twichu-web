@@ -1,9 +1,9 @@
 <template>
   <ul class="navbar-nav ml-auto">
-    <li class="nav-item" v-if="isAuthenticated">
+    <li class="nav-item" v-if="isAuthenticated && profile.id_str">
       <router-link  class="nav-link" :to="{ name: 'ProfilePage' }">
         <img class="nav-profile-img" v-bind:src="profile.profile_image_url">
-        <b>{{profile.name}}</b> <small>(@{{profile.screen_name}})</small>
+        <b>{{profile.name}}</b> <small class="text-muted">(@{{profile.screen_name}})</small>
         <span class="nav-profile-info">
           | {{profile.statuses_count}} 트윗 |
           {{profile.friends_count}} 팔로잉 |
@@ -26,23 +26,25 @@
 import { mapGetters, mapActions } from 'vuex';
 
 export default {
-  created () {
-    this.getProfile()
+  created() {
+    if (this.$store.state.isAuthenticated) {
+      this.getProfile();
+    }
   },
   computed: {
     ...mapGetters('profileModule', ['profile']),
-    isAuthenticated: function () {
-      return this.$store.state.isAuthenticated
-    }
+    isAuthenticated() {
+      return this.$store.state.isAuthenticated;
+    },
   },
   methods: {
     ...mapActions({
       logout: 'logout',
       getProfile: 'profileModule/getProfile',
     }),
-    authenticate: function (provider) {
+    authenticate(provider) {
       this.$store.dispatch('authenticate', provider);
     },
-  }
-}
+  },
+};
 </script>

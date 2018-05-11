@@ -11,13 +11,13 @@
 </template>
 
 <script>
-import AppNavMenu from './AppNavMenu.vue';
-import AppNavHeader from './AppNavHeader.vue';
+import AppNavMenu from './AppNavMenu';
+import AppNavHeader from './AppNavHeader';
 
 export default {
   components: {
     'app-nav-menu': AppNavMenu,
     'app-nav-header': AppNavHeader,
   },
-}
+};
 </script>

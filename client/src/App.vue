@@ -12,8 +12,8 @@
 
 <script>
 import 'bootstrap';
-import AppNavBar from '@/components/app/AppNavBar.vue';
-import AppFooter from '@/components/app/AppFooter.vue'
+import AppNavBar from '@/components/app/AppNavBar';
+import AppFooter from '@/components/app/AppFooter';
 
 export default {
   name: 'App',

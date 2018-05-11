@@ -13,6 +13,16 @@ const userService = {
         });
     });
   },
+  patchProfile(profile) {
+    return new Promise((resolve, reject) => {
+      axios.patch('/api/profile', profile)
+        .then((response) => {
+          resolve(response.data);
+        }).catch((response) => {
+          reject(response.status);
+        });
+    });
+  },
 };
 
 export default userService;

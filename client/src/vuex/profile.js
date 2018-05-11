@@ -14,10 +14,18 @@ const actions = {
       context.commit('getProfile', data);
     });
   },
+  patchProfile(context, profile) {
+    return userService.patchProfile(profile).then((data) => {
+      context.commit('patchProfile', data);
+    });
+  },
 };
 
 const mutations = {
   getProfile(states, profile) {
+    state.profile = profile;
+  },
+  patchProfile(states, profile) {
     state.profile = profile;
   },
 };

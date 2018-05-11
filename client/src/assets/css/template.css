@@ -21,7 +21,7 @@ body.fixed-nav {
 
 .content-wrapper {
   min-height: calc(100vh - 56px);
-  padding-top: 5rem;
+  padding-top: 4.6rem;
 }
 
 #mainNav .navbar-collapse {
@@ -241,6 +241,7 @@ body.sidenav-toggled #mainNav.static-top #sidenavToggler i {
 .content-wrapper {
   overflow-x: hidden;
   background: white;
+  padding-bottom: 72px;
 }
 
 @media (min-width: 992px) {
@@ -436,6 +437,10 @@ footer.sticky-footer {
   }
 }
 
+* {
+  border-radius: 0 !important;
+}
+
 .nav-logo {
   height: 30px;
 }
@@ -453,4 +458,8 @@ footer.sticky-footer {
 .nav-menu.router-link-exact-active {
   color: white !important;
   background-color: #495057;
+}
+
+.my-profile-img {
+  height: 100%;
 }
