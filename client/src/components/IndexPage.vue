@@ -1,15 +1,8 @@
 <template>
   <div>
-    <router-link :to="{ name: 'HelloWorld' }">Go To HelloWorld</router-link>
-    <!-- <p>
-    {{ user_data }} {{ user_timeline }}
-    </p> -->
-    <div v-for="tweet in tweets" class="tweet">
-      <img v-bind:src="tweet.poster" class="poster">
-      <div>
-        <strong>{{ tweet.content }}</strong>, <i>@{{ tweet.author.username }}</i> [{{ tweet.author.fullname }}] {{ tweet.date }}
-        <!-- <router-link :to="{ name: 'show', params: { id: tweet.id }}">더보기</router-link> -->
-      </div>
+    <h2>Twichu(?) 소개 페이지</h2>
+    <div v-for="tweet in tweets" v-bind:key="tweet.id">
+      <strong>{{ tweet.content }}</strong>, <i>@{{ tweet.author.username }}</i> [{{ tweet.author.fullname }}] {{ tweet.date }}
     </div>
   </div>
 </template>

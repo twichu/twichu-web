@@ -449,3 +449,8 @@ footer.sticky-footer {
 .nav-profile-info {
   margin-left: 7px;
 }
+
+.nav-menu.router-link-exact-active {
+  color: white !important;
+  background-color: #495057;
+}

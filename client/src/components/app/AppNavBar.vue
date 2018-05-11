@@ -1,7 +1,7 @@
 <template>
   <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top" id="mainNav">
     <router-link class="navbar-brand" :to="{ name: 'Index' }">
-      <img class="nav-logo" src="../assets/logo.png"/> Twichu
+      <img class="nav-logo" src="@/assets/logo.png"/> Twichu
     </router-link>
     <div class="collapse navbar-collapse">
       <app-nav-menu/>

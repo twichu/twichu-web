@@ -40,6 +40,7 @@ const store = new Vuex.Store({
     },
     logout(context) {
       vueAuth.logout().then(() => {
+        profileModule.state.profile = {};
         context.commit('isAuthenticated', {
           isAuthenticated: vueAuth.isAuthenticated(),
         });
