@@ -1,6 +1,7 @@
 const mongoose = require('mongoose');
-require('./models/Tweet');
 require('./models/User');
+require('./models/Tweet');
+require('./models/UsersTweet');
 
 module.exports = function mongooseConfig(env) {
   const url = {

@@ -14,7 +14,7 @@ const tweetSchema = mongoose.Schema({
   retweet_count: Number,
   favorite_count: Number,
   lang: String,
-  keywords: [String],
+  keyword: String,
 });
 
 mongoose.model('Tweet', tweetSchema);

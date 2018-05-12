@@ -2,7 +2,7 @@
   <ul class="navbar-nav ml-auto">
     <li class="nav-item" v-if="isAuthenticated && profile.id_str">
       <router-link  class="nav-link" :to="{ name: 'ProfilePage' }">
-        <img class="nav-profile-img" v-bind:src="profile.profile_image_url">
+        <img class="nav-profile-img" v-bind:src="profile.profile_image_url_https">
         <b>{{profile.name}}</b> <small class="text-muted">(@{{profile.screen_name}})</small>
         <span class="nav-profile-info">
           | {{profile.statuses_count}} 트윗 |

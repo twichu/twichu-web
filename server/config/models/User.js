@@ -6,7 +6,7 @@ const userSchema = mongoose.Schema({
   id_str: String,
   name: String,
   screen_name: String,
-  profile_image_url: String,
+  profile_image_url_https: String,
   statuses_count: Number,
   friends_count: Number,
   followers_count: Number,

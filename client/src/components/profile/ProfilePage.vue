@@ -7,7 +7,7 @@
         </h4>
         <div class="card-body">
           <div class="row">
-            <img v-bind:src="profile.profile_image_url" class="my-profile-img col-3">
+            <img v-bind:src="profile.profile_image_url_https" class="my-profile-img col-3">
             <div class="col">
               <h5 class="card-title">
                 <span class="badge badge-secondary">{{profile.statuses_count}} 트윗</span>
