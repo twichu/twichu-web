@@ -14,11 +14,16 @@
                 <span class="badge badge-secondary">{{profile.friends_count}} 팔로잉</span>
                 <span class="badge badge-secondary">{{profile.followers_count}} 팔로워</span>
               </h5>
-              <p class="card-text">{{profile.description}}</p>
+              <p class="card-text" v-if="profile.description">{{profile.description}}</p>
               <p class="card-text">
-                <i class="fa fa-fw fa-map-marker"></i> {{profile.location}}<br>
-                <i class="fa fa-fw fa-globe"></i> <a v-bind:href="profile.url">웹사이트</a>
+                <span v-if="profile.location">
+                  <i class="fa fa-fw fa-map-marker"></i> {{profile.location}}<br>
+                </span>
+                <span v-if="profile.url">
+                  <i class="fa fa-fw fa-globe"></i> <a v-bind:href="profile.url">웹사이트</a><br>
+                </span>
               </p>
+              <h5 v-if="profile.is_analyzing"><span class="badge badge-info">분석중</span></h5>
             </div>
           </div><br>
           <label><i class="fa fa-fw fa-star-o"></i> 나의 관심사</label>

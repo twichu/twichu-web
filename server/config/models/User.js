@@ -15,6 +15,7 @@ const userSchema = mongoose.Schema({
   url: String,
   lang: String,
   keywords: [String],
+  is_analyzing: { type: Boolean, default: false },
 });
 
 mongoose.model('User', userSchema);
