@@ -12,7 +12,7 @@
 <script>
 export default {
   created() {
-    this.$http.get('/api/tweets').then((response) => {
+    this.$http.get('/api/suggest/tweet').then((response) => {
       this.tweets = response.data;
     });
   },

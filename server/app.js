@@ -20,7 +20,7 @@ app.use(session({ secret: 'keyboard cat', resave: true, saveUninitialized: true 
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(require('connect-history-api-fallback')());
 
-const apiRouter = require('./routes/api');
+const apiRouter = require('./routes/apiRoutes');
 
 app.use('/api', apiRouter);
 app.get('*', (req, res) => {
