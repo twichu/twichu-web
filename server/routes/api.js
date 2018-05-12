@@ -1,241 +1,142 @@
-var express = require('express');
-var router = express.Router();
-var Tweet = require('mongoose').model('Tweet');;
-const User = require('mongoose').model('User');
+const express = require('express');
+const OAuth = require('oauth');
+const oauthSignature = require('oauth-signature');
+const timestamp = require('unix-timestamp');
+const axios = require('axios');
 const { TWITTER_CONSUMER_KEY, TWITTER_CONSUMER_SECRET } = require('../../twitter-services');
-const passport = require('passport');
-var OAuth = require('oauth');
-var timestamp = require('unix-timestamp');
-var oauthSignature = require('oauth-signature');
-var axios = require('axios');
+
+const router = express.Router();
+
+const Tweet = require('mongoose').model('Tweet');
+const User = require('mongoose').model('User');
 
 /* GET tweet list. */
-router.get('/tweets', function (req, res, next) {
-  Tweet.find({}).exec(function (err, collection) {
+router.get('/tweets', (req, res) => {
+  Tweet.find({}).exec((err, collection) => {
     res.send(collection);
-  })
+  });
 });
 
-oauthService = new OAuth.OAuth(
+const oauthService = new OAuth.OAuth(
   'https://api.twitter.com/oauth/request_token',
   'https://api.twitter.com/oauth/access_token',
   TWITTER_CONSUMER_KEY,
   TWITTER_CONSUMER_SECRET,
   '1.0A',
   null,
-  'HMAC-SHA1'
-)
+  'HMAC-SHA1',
+);
+
+function getVerifyCredentials(req, res, oauthAccessToken, oauthAccessTokenSecret) {
+  const url = 'https://api.twitter.com/1.1/account/verify_credentials.json';
+  const params = {
+    oauth_consumer_key: TWITTER_CONSUMER_KEY,
+    oauth_nonce: (`vueauth-${new Date().getTime()}`),
+    oauth_signature_method: 'HMAC-SHA1',
+    oauth_timestamp: timestamp.now(),
+    oauth_token: oauthAccessToken,
+    oauth_version: '1.0',
+  };
+  const signature = oauthSignature.generate('GET', url, params, TWITTER_CONSUMER_SECRET, oauthAccessTokenSecret);
+
+  axios.get(url, {
+    headers: {
+      Authorization: 'OAuth ' +
+        `oauth_consumer_key="${params.oauth_consumer_key}",` +
+        `oauth_nonce="${params.oauth_nonce}",` +
+        `oauth_signature="${signature}",` +
+        `oauth_signature_method="${params.oauth_signature_method}",` +
+        `oauth_timestamp="${params.oauth_timestamp}",` +
+        `oauth_token="${params.oauth_token}",` +
+        `oauth_version="${params.oauth_version}"`,
+    },
+  }).then((response) => {
+    User.findOne({
+      id_str: response.data.id_str,
+    }, (err, user) => {
+      if (err) console.log(err);
+
+      if (!user) {
+        const newUser = new User(response.data);
+        newUser.access_token = oauthAccessToken;
+        newUser.access_token_secret = oauthAccessTokenSecret;
+        newUser.save((err) => {
+          if (err) console.log(err);
+          res.json(newUser);
+        });
+      } else {
+        const oldUser = user;
+        Object.keys(response.data).forEach((key) => {
+          oldUser[key] = response.data[key];
+        });
+        oldUser.save((err) => {
+          if (err) console.log(err);
+          res.json(oldUser);
+        });
+      }
+    });
+  }).catch((err) => {
+    res.status(500).json(err);
+  });
+}
 
 router.post('/auth/twitter', (req, res) => {
   if (!req.body.oauth_token) {
-    oauthService.getOAuthRequestToken({ oauth_callback: req.body.redirectUri }, function (error, oauthToken, oauthTokenSecret, results) {
-      if (error) {
-        res.status(500).json(error)
-      } else {
-        res.json({
-          oauth_token: oauthToken,
-          oauth_token_secret: oauthTokenSecret
-        })
-      }
-    })
-  } else {
-    oauthService.getOAuthAccessToken(req.body.oauth_token, null, req.body.oauth_verifier, function (error, oauthAccessToken, oauthAccessTokenSecret, results) {
-
-      if (error) {
-        res.status(500).json(error)
-      } else {
-        var verifyCredentialsUrl = 'https://api.twitter.com/1.1/account/verify_credentials.json'
-        var parameters = {
-          oauth_consumer_key: TWITTER_CONSUMER_KEY,
-          oauth_token: oauthAccessToken,
-          oauth_nonce: ('vueauth-' + new Date().getTime()),
-          oauth_timestamp: timestamp.now(),
-          oauth_signature_method: 'HMAC-SHA1',
-          oauth_version: '1.0'
-        }
-
-        var signature = oauthSignature.generate('GET', verifyCredentialsUrl, parameters, TWITTER_CONSUMER_SECRET, oauthAccessTokenSecret)
-
-        axios.get('https://api.twitter.com/1.1/account/verify_credentials.json', { 
-          headers: {
-            Authorization:  'OAuth ' +
-              'oauth_consumer_key="' + TWITTER_CONSUMER_KEY + '",' +
-              'oauth_token="' + oauthAccessToken + '",' +
-              'oauth_nonce="' + parameters.oauth_nonce + '",' +
-              'oauth_timestamp="' + parameters.oauth_timestamp + '",' +
-              'oauth_signature_method="HMAC-SHA1",'+
-              'oauth_version="1.0",' +
-              'oauth_signature="' + signature + '"'
-          }
-        }).then(function (response) {
-          User.findOne({
-            'id_str': response.data.id_str
-          }, function (err, user) {
-            if (err) console.log(err);
-    
-            if (!user) {
-              user = new User(response.data);
-              user.access_token = oauthAccessToken;
-              user.access_token_secret = oauthAccessTokenSecret;
-              user.save(function (err) {
-                if (err) console.log(err);
-                res.json(user);
-              });
-            } else {
-              res.json(user);
-            }
+    oauthService.getOAuthRequestToken(
+      { oauth_callback: req.body.redirectUri },
+      (error, oauthToken, oauthTokenSecret) => {
+        if (error) {
+          res.status(500).json(error);
+        } else {
+          res.json({
+            oauth_token: oauthToken,
+            oauth_token_secret: oauthTokenSecret,
           });
-        }).catch(function (err) {
-          console.log(err.response.data)
-          res.status(500).json(err.response.data)
-        })
-      }
-    })
+        }
+      },
+    );
+  } else {
+    oauthService.getOAuthAccessToken(
+      req.body.oauth_token, null, req.body.oauth_verifier,
+      (error, oauthAccessToken, oauthAccessTokenSecret) => {
+        if (error) {
+          res.status(500).json(error);
+        } else {
+          getVerifyCredentials(req, res, oauthAccessToken, oauthAccessTokenSecret);
+        }
+      },
+    );
   }
-})
-
-// router.get('/auth/twitter',
-//   passport.authenticate('twitter'));
-
-// router.get('/auth/twitter/callback',
-//   passport.authenticate('twitter', {
-//     successRedirect: 'http://127.0.0.1:8080/',
-//     failureRedirect: '/',
-//   }),
-// );
+});
 
 router.get('/profile', (req, res) => {
   if (req.headers.authorization) {
-
     User.findOne({
-      'access_token': req.headers.authorization.split(' ')[1]
-    }, function (err, user) {
+      access_token: req.headers.authorization.split(' ')[1],
+    }, (err, user) => {
       if (err) console.log(err);
 
       if (user) {
-        var oauthAccessToken = user.access_token;
-        var oauthAccessTokenSecret = user.access_token_secret;
-
-        var verifyCredentialsUrl = 'https://api.twitter.com/1.1/account/verify_credentials.json'
-        var parameters = {
-          oauth_consumer_key: TWITTER_CONSUMER_KEY,
-          oauth_token: oauthAccessToken,
-          oauth_nonce: ('vueauth-' + new Date().getTime()),
-          oauth_timestamp: timestamp.now(),
-          oauth_signature_method: 'HMAC-SHA1',
-          oauth_version: '1.0'
-        }
-
-        var signature = oauthSignature.generate('GET', verifyCredentialsUrl, parameters, TWITTER_CONSUMER_SECRET, oauthAccessTokenSecret)
-        
-        axios.get('https://api.twitter.com/1.1/account/verify_credentials.json', { 
-          headers: {
-            Authorization:  'OAuth ' +
-              'oauth_consumer_key="' + TWITTER_CONSUMER_KEY + '",' +
-              'oauth_token="' + oauthAccessToken + '",' +
-              'oauth_nonce="' + parameters.oauth_nonce + '",' +
-              'oauth_timestamp="' + parameters.oauth_timestamp + '",' +
-              'oauth_signature_method="HMAC-SHA1",'+
-              'oauth_version="1.0",' +
-              'oauth_signature="' + signature + '"'
-          }
-        }).then(function (response) {
-          user.description = response.data.description
-          user.followers_count = response.data.followers_count
-          user.friends_count = response.data.friends_count
-          user.lang = response.data.lang
-          user.location = response.data.location
-          user.name = response.data.name
-          user.profile_image_url = response.data.profile_image_url
-          user.screen_name = response.data.screen_name
-          user.statuses_count = response.data.statuses_count
-          user.url = response.data.url
-
-          user.save(function (err) {
-            if (err) console.log(err);
-            res.json(user);
-          });
-        }).catch(function (err) {
-          console.log(err.response.data)
-          res.status(500).json(err.response.data)
-        })
+        getVerifyCredentials(req, res, user.access_token, user.access_token_secret);
       }
     });
-
   }
 });
 
 router.patch('/profile', (req, res) => {
   if (req.headers.authorization) {
     User.findOne({
-      'access_token': req.headers.authorization.split(' ')[1]
-    }, function (err, user) {
+      access_token: req.headers.authorization.split(' ')[1],
+    }, (err, user) => {
       if (err) console.log(err);
-      if(req.body._id) delete req.body._id
-      if(req.body.access_token) delete req.body.access_token
-      if(req.body.access_token_secret) delete req.body.access_token_secret
-      if(req.body.id_str) delete req.body.id_str
 
-      for(var p in req.body)
-      {
-        user[p] = req.body[p];
-      }
-      user.save(function (err) {
-        if (err) {
-          res.status(500).send(err);
-        } else {
-          res.json(user);
-        }
+      const patchUser = user;
+      patchUser.keywords = req.body.keywords;
+      patchUser.save((err) => {
+        if (err) console.log(err);
+        res.json(patchUser);
       });
     });
-  }
-});
-
-router.get('/hometimeline', (req, res) => {
-  if (req.headers.authorization) {
-    var oauthAccessToken;
-    var oauthAccessTokenSecret;
-
-    User.findOne({
-      'access_token': req.headers.authorization.split(' ')[1]
-    }, function (err, user) {
-      if (err) console.log(err);
-
-      if (user) {
-        oauthAccessToken = user.access_token;
-        oauthAccessTokenSecret = user.access_token_secret;
-      }
-    });
-
-    var verifyCredentialsUrl = 'https://api.twitter.com/1.1/statuses/home_timeline.json'
-    var parameters = {
-      oauth_consumer_key: TWITTER_CONSUMER_KEY,
-      oauth_token: oauthAccessToken,
-      oauth_nonce: ('vueauth-' + new Date().getTime()),
-      oauth_timestamp: timestamp.now(),
-      oauth_signature_method: 'HMAC-SHA1',
-      oauth_version: '1.0'
-    }
-
-    var signature = oauthSignature.generate('GET', verifyCredentialsUrl, parameters, TWITTER_CONSUMER_SECRET, oauthAccessTokenSecret)
-    
-    axios.get('https://api.twitter.com/1.1/statuses/home_timeline.json', { 
-      headers: {
-        Authorization:  'OAuth ' +
-          'oauth_consumer_key="' + TWITTER_CONSUMER_KEY + '",' +
-          'oauth_token="' + oauthAccessToken + '",' +
-          'oauth_nonce="' + parameters.oauth_nonce + '",' +
-          'oauth_timestamp="' + parameters.oauth_timestamp + '",' +
-          'oauth_signature_method="HMAC-SHA1",'+
-          'oauth_version="1.0",' +
-          'oauth_signature="' + signature + '"'
-      }
-    }).then(function (response) {
-      res.json(response.data);
-    }).catch(function (err) {
-      console.log(err.response.data)
-      res.status(500).json(err.response.data)
-    })
   }
 });
 

@@ -17,4 +17,4 @@ const userSchema = mongoose.Schema({
   keywords: [String],
 });
 
-const User = mongoose.model('User', userSchema);
+mongoose.model('User', userSchema);
