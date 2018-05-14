@@ -28,6 +28,7 @@ export default {
 @import '../node_modules/bootstrap/dist/css/bootstrap.min.css';
 @import '../node_modules/font-awesome/css/font-awesome.min.css';
 @import './assets/css/template.css';
+@import './assets/css/dataTables.bootstrap4.css';
 
 #app {
   -webkit-font-smoothing: antialiased;
