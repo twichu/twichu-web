@@ -11,7 +11,7 @@ router.get('/tweet', (req, res) => {
     }, (err, user) => {
       if (err) console.log(err);
 
-      console.log(user);
+      console.log(user.name);
       /* 유저 keywords와 트윗 keyword 비교해서 해당 트윗 추천 (시간 리트윗 댓글 추천 수) */
       Tweet.find({}).exec((err, collection) => {
         res.send(collection);
@@ -27,7 +27,7 @@ router.get('/user', (req, res) => {
     }, (err, user) => {
       if (err) console.log(err);
 
-      console.log(user);
+      console.log(user.name);
       /* 유저 keywords와 유저 keywords 비교해서 해당 유저 추천 */
       User.find({}).select('name screen_name id_str profile_image_url_https').exec((err, collection) => {
         res.send(collection);

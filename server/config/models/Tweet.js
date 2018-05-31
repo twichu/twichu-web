@@ -10,11 +10,10 @@ const tweetSchema = mongoose.Schema({
     screen_name: String,
     profile_image_url_https: String,
   },
-  reply_count: Number,
   retweet_count: Number,
   favorite_count: Number,
   lang: String,
-  keyword: String,
+  keyword: { type: String, default: null },
 });
 
 mongoose.model('Tweet', tweetSchema);
