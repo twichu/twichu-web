@@ -6,7 +6,7 @@ const User = require('mongoose').model('User');
 const UsersTweet = require('mongoose').model('UsersTweet');
 
 function analysisController() {
-  function getUserTimeline(req, userId, oauthAccessToken, oauthAccessTokenSecret) {
+  function getUserTimeline(req, user, oauthAccessToken, oauthAccessTokenSecret) {
     const url = 'https://api.twitter.com/1.1/statuses/user_timeline.json';
     const params = {
       oauth_consumer_key: TWITTER_CONSUMER_KEY,
@@ -35,7 +35,7 @@ function analysisController() {
       },
     }).then((response) => {
       const userstweet = new UsersTweet();
-      userstweet.user_id = userId;
+      userstweet.user_id = user.id;
       response.data.forEach((element) => {
         if (element.text.indexOf('RT @') === 0) {
           userstweet.retweets.push(element);
@@ -56,13 +56,17 @@ function analysisController() {
       }, (err, user) => {
         if (err) console.log(err);
 
+        // if (user.is_analyzing === false) {
         const patchUser = user;
-        patchUser.is_analyzing = !patchUser.is_analyzing;
-        getUserTimeline(req, patchUser.id, patchUser.access_token, patchUser.access_token_secret);
+        patchUser.is_analyzing = true;
+        patchUser.get_tweets_count = req.body.tweet_count;
+        patchUser.get_retweets_count = req.body.retweet_count;
+        getUserTimeline(req, patchUser, patchUser.access_token, patchUser.access_token_secret);
         patchUser.save((err) => {
           if (err) console.log(err);
           res.json(patchUser);
         });
+        // }
       });
     }
   }

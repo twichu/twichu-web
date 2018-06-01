@@ -14,8 +14,11 @@ const userSchema = mongoose.Schema({
   location: String,
   url: String,
   lang: String,
+  created_at: String,
   keywords: [String],
   is_analyzing: { type: Boolean, default: false },
+  get_tweets_count: { type: Number, default: 0 },
+  get_retweets_count: { type: Number, default: 0 },
 });
 
 mongoose.model('User', userSchema);
