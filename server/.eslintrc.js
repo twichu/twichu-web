@@ -3,5 +3,6 @@ module.exports = {
     rules: {
         'no-console': 'off',
         'no-shadow': 'off',
+        'no-await-in-loop': 'off',
     },
 };

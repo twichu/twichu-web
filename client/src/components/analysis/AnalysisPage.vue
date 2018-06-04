@@ -10,7 +10,7 @@
 
       <b-modal ref="reqCompleteModal" hide-footer title="나의 트윗을 통한 분석">
         <div class="d-block text-center">
-          <h3>분석 요청 완료</h3>
+          <h3>{{ msg }}</h3>
         </div>
         <b-btn class="mt-3" variant="dark" block @click="hideModal">확인</b-btn>
       </b-modal>
@@ -24,6 +24,7 @@ export default {
     return {
       tweet_count: 100,
       retweet_count: 100,
+      msg: '',
     };
   },
   methods: {
@@ -37,7 +38,8 @@ export default {
       this.$http.post('/api/analysis', {
         tweet_count: this.tweet_count,
         retweet_count: this.retweet_count,
-      }).then(() => {
+      }).then((response) => {
+        this.msg = response.data.msg;
         this.showModal();
       });
     },
