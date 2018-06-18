@@ -12,7 +12,7 @@
 <script>
 export default {
   created() {
-    this.$http.get('/api/suggest/user').then((response) => {
+    this.$http.get('/api/suggest/users').then((response) => {
       this.users = response.data;
     });
   },

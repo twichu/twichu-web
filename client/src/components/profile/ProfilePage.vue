@@ -27,17 +27,16 @@
             </div>
           </div><br>
           <label><i class="fa fa-fw fa-star-o"></i> 나의 관심사</label>
-          <div class="input-group">
-            <input type="text" class="form-control text-center"
-              v-for="(keyword, index) in profile.keywords" v-bind:key="keyword.id"
-              v-model="profile.keywords[index]" :readonly="!isEdited"
-              :hidden="!isEdited && keyword==''">
-            <div class="input-group-append" :hidden="!isEdited">
-              <button @click="push()" class="btn btn-outline-secondary">
-                <i class="fa fa-fw fa-plus"></i>
-              </button>
-            </div>
-          </div>
+          <br>
+          <button @click="pop(keyword)" class="btn btn-outline-dark btn-sm mx-1 my-1"
+            v-for="keyword in profile.keywords" v-bind:key="keyword.id">
+            {{keyword}}
+          </button>
+          <button @click="push(keyword)" class="btn btn-outline-secondary btn-sm mx-1 my-1"
+            v-for="keyword in allKeywords" v-if="profile.keywords.indexOf(keyword) === -1"
+            v-bind:key="keyword.id" :hidden="!isEdited">
+            {{keyword}}
+          </button>
         </div>
         <div class="card-footer text-right" v-if="!isEdited">
           <div @click="edit()" class="btn btn-dark">수정</div>
@@ -61,12 +60,16 @@ export default {
   created() {
     if (this.$store.state.isAuthenticated) {
       this.getProfile();
+      this.$http.get('/api/suggest/keywords').then((response) => {
+        this.allKeywords = response.data;
+      });
     }
   },
   data() {
     return {
       isEdited: false,
-      keywords: [],
+      allKeywords: [],
+      prevKeywords: [],
     };
   },
   computed: {
@@ -82,25 +85,22 @@ export default {
     }),
     edit() {
       this.isEdited = true;
-      this.keywords = JSON.parse(JSON.stringify(this.profile.keywords));
+      this.prevKeywords = JSON.parse(JSON.stringify(this.profile.keywords));
     },
     cancel() {
       this.isEdited = false;
-      this.profile.keywords = JSON.parse(JSON.stringify(this.keywords));
+      this.profile.keywords = JSON.parse(JSON.stringify(this.prevKeywords));
     },
-    push() {
-      this.profile.keywords.push('');
+    push(keyword) {
+      this.profile.keywords.push(keyword);
+    },
+    pop(keyword) {
+      if (this.isEdited) {
+        const index = this.profile.keywords.indexOf(keyword);
+        if (index !== -1) this.profile.keywords.splice(index, 1);
+      }
     },
     complete() {
-      let i;
-      const keywords = [];
-      for (i = 0; i < this.profile.keywords.length; i += 1) {
-        if (this.profile.keywords[i] !== '') {
-          keywords.push(this.profile.keywords[i]);
-        }
-      }
-      this.profile.keywords = JSON.parse(JSON.stringify(keywords));
-
       this.$store.dispatch('profileModule/patchProfile', this.profile)
         .then(() => {
           this.isEdited = false;

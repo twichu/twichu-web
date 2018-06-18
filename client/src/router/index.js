@@ -15,8 +15,8 @@ export default new Router({
     { path: '/', name: 'Index', component: IndexPage },
     { path: '/analysis', name: 'AnalysisPage', component: AnalysisPage },
     { path: '/profile', name: 'ProfilePage', component: ProfilePage },
-    { path: '/suggest/tweet', name: 'TweetSuggestPage', component: TweetSuggestPage },
-    { path: '/suggest/user', name: 'UserSuggestPage', component: UserSuggestPage },
+    { path: '/suggest/tweets', name: 'TweetSuggestPage', component: TweetSuggestPage },
+    { path: '/suggest/users', name: 'UserSuggestPage', component: UserSuggestPage },
     { path: '*', component: NotFound },
   ],
 });

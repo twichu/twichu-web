@@ -1,10 +1,17 @@
 const express = require('express');
 const User = require('mongoose').model('User');
 const Tweet = require('mongoose').model('Tweet');
+const Keyword = require('mongoose').model('Keyword');
 
 const router = express.Router();
 
-router.get('/tweet', (req, res) => {
+router.get('/keywords', (req, res) => {
+  Keyword.find({}).exec((err, collection) => {
+    res.send(collection.map((doc => doc.keyword)));
+  });
+});
+
+router.get('/tweets', (req, res) => {
   if (req.headers.authorization) {
     User.findOne({
       access_token: req.headers.authorization.split(' ')[1],
@@ -20,7 +27,7 @@ router.get('/tweet', (req, res) => {
   }
 });
 
-router.get('/user', (req, res) => {
+router.get('/users', (req, res) => {
   if (req.headers.authorization) {
     User.findOne({
       access_token: req.headers.authorization.split(' ')[1],
