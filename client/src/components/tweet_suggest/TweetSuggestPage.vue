@@ -1,5 +1,6 @@
 <template>
   <div>
+    <mini-profile></mini-profile><br>
     <h2>TweetSuggestPage</h2>
     <div v-for="tweet in tweets" v-bind:key="tweet.id">
       <b>키워드 - {{ tweet.keyword }}</b><br>
@@ -14,6 +15,8 @@
 </template>
 
 <script>
+import MiniProfile from '@/components/profile/MiniProfile';
+
 export default {
   created() {
     this.$http.get('/api/suggest/tweets').then((response) => {
@@ -24,6 +27,9 @@ export default {
     return {
       tweets: [],
     };
+  },
+  components: {
+    'mini-profile': MiniProfile,
   },
 };
 </script>

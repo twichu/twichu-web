@@ -463,3 +463,8 @@ footer.sticky-footer {
 .my-profile-img {
   height: 100%;
 }
+
+.mini-profile-img {
+  height: 35px;
+  margin-right: 14px;
+}

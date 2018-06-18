@@ -26,8 +26,7 @@
               <h5 v-if="profile.is_analyzing"><span class="badge badge-info">분석중</span></h5>
             </div>
           </div><br>
-          <label><i class="fa fa-fw fa-star-o"></i> 나의 관심사</label>
-          <br>
+          <label><i class="fa fa-fw fa-star-o"></i> 나의 관심사</label><br>
           <button @click="pop(keyword)" class="btn btn-outline-dark btn-sm mx-1 my-1"
             v-for="keyword in profile.keywords" v-bind:key="keyword.id">
             {{keyword}}
