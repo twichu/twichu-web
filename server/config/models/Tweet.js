@@ -8,7 +8,6 @@ const tweetSchema = mongoose.Schema({
     id_str: String,
     name: String,
     screen_name: String,
-    profile_image_url_https: String,
   },
   retweet_count: Number,
   favorite_count: Number,

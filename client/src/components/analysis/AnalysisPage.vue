@@ -3,22 +3,24 @@
     <div class="card">
       <div class="card-body">
         <h3><i class="fa fa-fw fa-pie-chart mb-2"></i> 나의 트윗을 통한 분석</h3>
-        <form class="form-inline">
-          <label class="mx-1">나의 최근 트윗 개수</label>
-          <input type="number" class="form-control col-md-1 mx-1" v-model="tweet_count">
-          <label class="mx-1">개와 최근 리트윗 개수</label>
-          <input type="number" class="form-control col-md-1 mx-1" v-model="retweet_count">
-          <label class="mx-1">개를</label>
-          <div @click="analysis()" class="btn btn-dark mx-1">분석요청</div>
-          <label class="mx-1">합니다.</label>
+        <h5>
+          <form class="form-inline">
+            <label class="mx-1">나의 최근 트윗 개수</label>
+            <input type="number" class="form-control col-md-1 mx-1" v-model="tweet_count">
+            <label class="mx-1">개와 최근 리트윗 개수</label>
+            <input type="number" class="form-control col-md-1 mx-1" v-model="retweet_count">
+            <label class="mx-1">개를</label>
+            <div @click="analysis()" class="btn btn-dark mx-1">분석요청</div>
+            <label class="mx-1">합니다.</label>
 
-          <b-modal ref="reqCompleteModal" hide-footer title="나의 트윗을 통한 분석">
-            <div class="d-block text-center">
-              <h3>{{ msg }}</h3>
-            </div>
-            <b-btn class="mt-3" variant="dark" block @click="hideModal">확인</b-btn>
-          </b-modal>
-        </form>
+            <b-modal ref="reqCompleteModal" hide-footer title="나의 트윗을 통한 분석">
+              <div class="d-block text-center">
+                <h3>{{ msg }}</h3>
+              </div>
+              <b-btn class="mt-3" variant="dark" block @click="hideModal">확인</b-btn>
+            </b-modal>
+          </form>
+        </h5>
       </div>
     </div>
     <br>
