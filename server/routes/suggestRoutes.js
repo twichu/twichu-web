@@ -11,6 +11,12 @@ router.get('/keywords', (req, res) => {
   });
 });
 
+router.get('/trends', (req, res) => {
+  Tweet.aggregate().sample(15).exec((err, collection) => {
+    res.send(collection);
+  });
+});
+
 router.get('/tweets', (req, res) => {
   if (req.headers.authorization) {
     User.findOne({
@@ -36,7 +42,7 @@ router.get('/users', (req, res) => {
 
       console.log(user.name);
       /* 유저 keywords와 유저 keywords 비교해서 해당 유저 추천 */
-      User.find({}).select('name screen_name id_str profile_image_url_https').exec((err, collection) => {
+      User.find({}).select('id_str name screen_name profile_image_url_https description location statuses_count friends_count followers_count').exec((err, collection) => {
         res.send(collection);
       });
     });
