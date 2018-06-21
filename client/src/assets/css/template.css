@@ -468,3 +468,8 @@ footer.sticky-footer {
   height: 35px;
   margin-right: 14px;
 }
+
+.btn-outline-secondary {
+  color: #a8abaf;
+  border-color: #a8abaf;
+}

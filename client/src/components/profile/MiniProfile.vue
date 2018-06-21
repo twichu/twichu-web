@@ -3,7 +3,7 @@
     <div v-if="isAuthenticated && profile.id_str">
       <div class="card">
         <div class="card-body">
-          <div class="form-inline mb-3">
+          <div class="form-inline">
             <img v-bind:src="profile.profile_image_url_https" class="mini-profile-img">
             <h4 class="card-text">{{profile.name}}
               <small class="text-muted">(@{{profile.screen_name}})</small>
@@ -12,10 +12,12 @@
               <h5 v-if="profile.is_analyzing"><span class="badge badge-info">분석중</span></h5>
             </div>
           </div>
-          <button class="btn btn-outline-dark btn-sm mx-1 my-1"
-            v-for="keyword in profile.keywords" v-bind:key="keyword.id">
-            {{keyword}}
-          </button>
+          <div class="mt-3" v-if="profile.keywords.length">
+            <button class="btn btn-outline-dark btn-sm mx-1 my-1"
+              v-for="keyword in profile.keywords" v-bind:key="keyword.id">
+              {{keyword}}
+            </button>
+          </div>
         </div>
       </div>
     </div>

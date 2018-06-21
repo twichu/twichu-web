@@ -38,6 +38,7 @@ function authController() {
           const newUser = new User(response.data);
           newUser.access_token = oauthAccessToken;
           newUser.access_token_secret = oauthAccessTokenSecret;
+          newUser.profile_image_url_https = newUser.profile_image_url_https.replace('_normal', '');
           newUser.save((err) => {
             if (err) console.log(err);
             res.json(newUser);
@@ -47,6 +48,7 @@ function authController() {
           Object.keys(response.data).forEach((key) => {
             oldUser[key] = response.data[key];
           });
+          oldUser.profile_image_url_https = oldUser.profile_image_url_https.replace('_normal', '');
           oldUser.save((err) => {
             if (err) console.log(err);
             res.json(oldUser);

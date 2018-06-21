@@ -3,9 +3,9 @@
     <mini-profile></mini-profile><br>
     <h3><i class="fa fa-fw fa-link"></i> 관심사 기반 유저 매칭</h3>
     <div v-masonry transition-duration="1s" item-selector=".item" class="row">
-      <div v-masonry-tile class="item col-3" v-for="user in users" v-bind:key="user.id">
+      <div v-masonry-tile class="item col-3 my-2" v-for="user in users" v-bind:key="user.id">
         <div class="card">
-          <img class="card-img-top" v-bind:src="user.profile_image_url_https" alt="Card image cap">
+          <img class="card-img-top" v-bind:src="user.profile_image_url_https">
           <div class="card-body">
             <h5 class="card-title">{{ user.name }}
               <small class="text-muted">@{{ user.screen_name }}</small>
