@@ -6,5 +6,6 @@ module.exports = {
         'no-await-in-loop': 'off',
         'no-underscore-dangle': 'off',
         'no-param-reassign': 'off',
+        'object-curly-newline': 'off',
     },
 };
