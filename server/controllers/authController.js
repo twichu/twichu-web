@@ -2,6 +2,7 @@ const { TWITTER_CONSUMER_KEY, TWITTER_CONSUMER_SECRET } = require('../twitter-se
 const oauthSignature = require('oauth-signature');
 const timestamp = require('unix-timestamp');
 const axios = require('axios');
+const moment = require('moment');
 const User = require('mongoose').model('User');
 
 function authController() {
@@ -38,6 +39,7 @@ function authController() {
           const newUser = new User(response.data);
           newUser.access_token = oauthAccessToken;
           newUser.access_token_secret = oauthAccessTokenSecret;
+          newUser.created_at = moment(newUser.created_at, 'dd MMM DD HH:mm:ss ZZ YYYY');
           newUser.profile_image_url_https = newUser.profile_image_url_https.replace('_normal', '');
           newUser.save((err) => {
             if (err) console.log(err);
@@ -48,6 +50,7 @@ function authController() {
           Object.keys(response.data).forEach((key) => {
             oldUser[key] = response.data[key];
           });
+          oldUser.created_at = moment(oldUser.created_at, 'dd MMM DD HH:mm:ss ZZ YYYY');
           oldUser.profile_image_url_https = oldUser.profile_image_url_https.replace('_normal', '');
           oldUser.save((err) => {
             if (err) console.log(err);

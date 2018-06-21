@@ -4,5 +4,7 @@ module.exports = {
         'no-console': 'off',
         'no-shadow': 'off',
         'no-await-in-loop': 'off',
+        'no-underscore-dangle': 'off',
+        'no-param-reassign': 'off',
     },
 };

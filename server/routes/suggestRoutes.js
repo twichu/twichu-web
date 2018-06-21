@@ -6,7 +6,7 @@ const Keyword = require('mongoose').model('Keyword');
 const router = express.Router();
 
 router.get('/keywords', (req, res) => {
-  Keyword.find({}).exec((err, collection) => {
+  Keyword.find().exec((err, collection) => {
     res.send(collection.map((doc => doc.keyword)));
   });
 });
@@ -24,9 +24,17 @@ router.get('/tweets', (req, res) => {
     }, (err, user) => {
       if (err) console.log(err);
 
-      console.log(user.name);
-      /* 유저 keywords와 트윗 keyword 비교해서 해당 트윗 추천 (시간 리트윗 댓글 추천 수) */
-      Tweet.find({}).exec((err, collection) => {
+      const query = [];
+      user.keywords.forEach((element) => {
+        query.push({ keyword: element });
+      });
+
+      /* 사용자의 관심사에 맞는 최근 인기 트윗 1000개 중 무작위 20개 추천 */
+      Tweet.aggregate([
+        { $match: { $or: query } },
+        { $sort: { created_at: -1 } },
+        { $limit: 1000 },
+      ]).sample(20).exec((err, collection) => {
         res.send(collection);
       });
     });
@@ -40,9 +48,14 @@ router.get('/users', (req, res) => {
     }, (err, user) => {
       if (err) console.log(err);
 
-      console.log(user.name);
-      /* 유저 keywords와 유저 keywords 비교해서 해당 유저 추천 */
-      User.find({}).select('id_str name screen_name profile_image_url_https description location statuses_count friends_count followers_count').exec((err, collection) => {
+      /* 사용자의 관심사에 맞는 유저 중 무작위 20명 추천 */
+      User.aggregate([{
+        $match: {
+          $and: [
+            { keywords: { $in: user.keywords } }, { _id: { $ne: user._id } },
+          ],
+        },
+      }]).sample(20).exec((err, collection) => {
         res.send(collection);
       });
     });

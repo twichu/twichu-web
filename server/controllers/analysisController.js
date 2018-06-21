@@ -2,6 +2,7 @@ const { TWITTER_CONSUMER_KEY, TWITTER_CONSUMER_SECRET } = require('../twitter-se
 const oauthSignature = require('oauth-signature');
 const timestamp = require('unix-timestamp');
 const axios = require('axios');
+const moment = require('moment');
 const User = require('mongoose').model('User');
 const UsersTweet = require('mongoose').model('UsersTweet');
 
@@ -50,6 +51,7 @@ function analysisController() {
       response.data.forEach((element) => {
         if (maxId === element.id_str) return;
 
+        element.created_at = moment(element.created_at, 'dd MMM DD HH:mm:ss ZZ YYYY');
         if (element.text.indexOf('RT @') === 0 && req.body.retweet_count > userstweet.retweets.length) {
           userstweet.retweets.push(element);
         } else if (req.body.tweet_count > userstweet.tweets.length) {
@@ -84,7 +86,7 @@ function analysisController() {
         if (user.is_analyzing === false) {
           getUserTimeline(req, res, user);
         } else {
-          res.status(202).json({ msg: '분석 중입니다...' });
+          res.status(202).json({ msg: '아직 분석 중입니다...' });
         }
       });
     }

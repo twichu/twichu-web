@@ -14,7 +14,7 @@ const userSchema = mongoose.Schema({
   location: String,
   url: String,
   lang: String,
-  created_at: String,
+  created_at: Date,
   keywords: [String],
   is_analyzing: { type: Boolean, default: false },
   get_tweets_count: { type: Number, default: 0 },
