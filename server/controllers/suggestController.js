@@ -53,7 +53,13 @@ function suggestController() {
               { keywords: { $in: user.keywords } }, { _id: { $ne: user._id } },
             ],
           },
-        }]).sample(20).exec((err, collection) => {
+        }, {
+          $project: {
+            access_token: 0,
+            access_token_secret: 0,
+          },
+        },
+        ]).sample(20).exec((err, collection) => {
           res.send(collection);
         });
       });
