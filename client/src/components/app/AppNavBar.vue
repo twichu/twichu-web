@@ -11,8 +11,8 @@
 </template>
 
 <script>
-import AppNavMenu from './AppNavMenu';
-import AppNavHeader from './AppNavHeader';
+import AppNavMenu from '@/components/app/AppNavMenu';
+import AppNavHeader from '@/components/app/AppNavHeader';
 
 export default {
   components: {

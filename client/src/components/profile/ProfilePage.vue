@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div v-if="isAuthenticated && profile.id_str">
+    <div v-if="isAuthenticated">
       <div class="card">
         <h4 class="card-header">{{profile.name}}
           <small class="text-muted">(@{{profile.screen_name}})</small>
@@ -47,13 +47,14 @@
       </div>
     </div>
     <div v-else-if="!isAuthenticated">
-      <h2>로그인이 필요한 기능입니다.</h2>
+      <require-login/>
     </div>
   </div>
 </template>
 
 <script>
 import { mapGetters, mapActions } from 'vuex';
+import RequireLogIn from '@/components/app/RequireLogIn';
 
 export default {
   created() {
@@ -70,6 +71,9 @@ export default {
       allKeywords: [],
       prevKeywords: [],
     };
+  },
+  components: {
+    'require-login': RequireLogIn,
   },
   computed: {
     ...mapGetters('profileModule', ['profile']),
