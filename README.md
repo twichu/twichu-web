@@ -4,10 +4,9 @@
 
 ## Install & Build
 ```
-npm install
-npm run build
-mongod
-npm start
+npm install (server/client)
+npm run build (client)
+npm start (server)
 ```
 
 ## Production

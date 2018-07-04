@@ -9,7 +9,7 @@ Vue.use(Vuex);
 Vue.use(VueAxios, axios);
 
 const vueAuth = new VueAuthenticate(Vue.prototype.$http, {
-  baseUrl: 'http://127.0.0.1:3000',
+  baseUrl: 'http://twichu.ml',
   providers: {
     twitter: {
       url: '/api/auth/twitter',
