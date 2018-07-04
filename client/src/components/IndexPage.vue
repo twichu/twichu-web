@@ -102,7 +102,7 @@
 
       <div v-masonry transition-duration="1s" item-selector=".item" class="row">
         <div v-masonry-tile class="item col-4" v-for="tweet in tweets" v-bind:key="tweet.id">
-          <tweet-embed :id="tweet.id_str"></tweet-embed>
+          <tweet-embed :id="tweet.statusid"></tweet-embed>
         </div>
       </div>
     </div>

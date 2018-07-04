@@ -6,9 +6,9 @@
       <div v-masonry transition-duration="1s" item-selector=".item" class="row">
         <div v-masonry-tile class="item col-4" v-for="tweet in tweets" v-bind:key="tweet.id">
           <h5><span class="badge badge-light btn-block keyword-badge">
-            {{ tweet.keyword }}
+            {{ tweet.cate_keyword }}
           </span></h5>
-          <tweet-embed :id="tweet.id_str" style="margin-top:-8px;"></tweet-embed>
+          <tweet-embed :id="tweet.statusid" style="margin-top:-8px;"></tweet-embed>
         </div>
       </div>
     </div>

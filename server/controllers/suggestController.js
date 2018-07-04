@@ -24,7 +24,7 @@ function suggestController() {
 
         const query = [];
         user.keywords.forEach((element) => {
-          query.push({ keyword: element });
+          query.push({ cate_keyword: element });
         });
 
         /* 사용자의 관심사에 맞는 최근 인기 트윗 1000개 중 무작위 20개 추천 */
