@@ -4,6 +4,11 @@
     <div class="content-wrapper">
       <div class="container-fluid">
         <router-view/>
+        <br>
+        <Adsense
+          data-ad-client="ca-pub-3397336129295247"
+          data-ad-slot="4467819708">
+        </Adsense>
         <app-footer/>
       </div>
     </div>

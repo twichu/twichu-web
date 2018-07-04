@@ -24,5 +24,9 @@
         <span class="nav-link-text">관심사 기반 유저 매칭</span>
       </router-link>
     </li>
+    <Adsense
+      data-ad-client="ca-pub-3397336129295247"
+      data-ad-slot="4467819708">
+    </Adsense>
   </ul>
 </template>
